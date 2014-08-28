@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>backbone demo</title>
+</head>
+<body>
+
+</body>
+<script src="jquery.js"></script>
+<script src="underscore-min.js"></script>
+<script src="backbone.js"></script>
+<script>
+(function ($) {
+       var Book = Backbone.Model.extend({
+            defaults:{
+                title:'default'
+            },
+            initialize:function(){
+                console.log('hello');
+            }
+       });
+
+       var BookShelf  = Backbone.Collection.extend({
+            model:Book
+       });
+
+       var book1 = new Book({title:'经济学'});
+       var book2 = new Book({title:'政治学'});
+       var book3 = new Book({title:'统计学'});
+
+       var bookShelf = new BookShelf;
+       bookShelf.add(book1);
+       bookShelf.add(book2);
+       bookShelf.add(book3);
+       // bookShelf.remove(book1);
+
+       bookShelf.each(function(book){
+            console.log(book.get('title'));
+       })
+
+       bookShelf.bind('reset', showAllBooks);
+       bookShelf.fetch({
+        url:'/getbooks/',
+        success:function(collection,response){
+            collection.each(function(book){
+                console.log(book.get('title'));
+            });
+        },
+        error:function(){
+            console.log('error');
+        }});
+
+        showAllBooks = function(){
+            bookShelf.each(function(book){
+                ​//将book数据渲染到页面。
+            });
+        }
+       // var Collection = Backbone.Collection = function(models, options) {
+       //      options || (options = {});
+       //      if (options.model) this.model = options.model;
+       //      if (options.comparator !== void 0) this.comparator = options.comparator;
+       //      this._reset();
+       //      this.initialize.apply(this, arguments);
+       //      if (models) this.reset(models, _.extend({silent: true}, options));
+       //  };
+
+
+})(jQuery);
+</script>
+</html>
