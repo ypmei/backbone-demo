@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>backbone demo</title>         
+        
+</head>
+<body>
+<div id="sum"></div>
+<script src="jquery.js"></script>
+        <script src="underscore.js"></script>
+        <script src="backbone.js"></script>
+
+        <script>
+        (function ($) {
+                
+                // Model就是一条数据记录， 如：
+                var PersonModel = Backbone.Model.extend({
+                  initialize:function(){
+                        //这是对数据属性变化做的事项
+                        //为了能在数据变更之后及时更新View上的显示，那就需要通过事件机制来处理。
+                  },
+                  defaults:{
+                    name:'ypmei',
+                    age:'18'
+                  },
+                  render:function(model){
+                        console.log(model);
+                        console.log(this);
+                        //model就是this
+                        console.log('名称变了')
+                  }
+
+                });
+                var pm = new PersonModel();
+
+                //set赋值,也可运行时赋值
+                pm.set({height:172});
+                //pm.set({name:'wangwu'});
+                var person = new PersonModel({'weight':130});
+                
+                //唯一取值方法
+                var age = pm.get('age');
+                console.log(age);
+
+                var json = person.toJSON();//json
+                var jsonString = JSON.stringify(person.toJSON())//json to string
+                console.log(json);
+                console.log(jsonString);
+                /*******************************************/
+
+                //model是数据，所以交互只能通过listenTo来实现对数据的监控,
+                //并更新view.如果是从异步的数据，需要listenTo监控sync,来完成初始化
+                var helloView = Backbone.View.extend({
+                        el:'#sum',
+                        initialize:function(options){
+                                this.model = options.model;
+                                this.listenTo(this.model,'change',this.show);
+                        },
+                        show:function(model){
+                                console.log(model);
+                                var name = this.model.get('name');
+                                this.$el.html(name);
+                        }
+                });
+                $(function(){
+                       var ps = new PersonModel();
+                       var hv = new helloView({
+                                model:ps
+                       });
+                       ps.set({name:'ssswkng'});
+
+
+                })
+                /*******************************************/
+
+                //Collection 是一个数据集，类同于数组
+                //声明数据模型PersonModel后，添加的数据都会带有PersonModel的数据格式
+                //及时有其他属性，会把数据添加到集合中。未声明Model会以添加的数据为准。
+                var PersonCollection = Backbone.Collection.extend({
+                        model:PersonModel
+                });
+                //添加数据
+                var pc = new PersonCollection()
+                pc.add([{'name':'zhangsan','age':19},{'sex':'女','age':22}]);
+                
+                var pcjson = JSON.stringify(pc);
+                console.log(pcjson);
+
+                var pcModels = pc.models;
+                console.log(pcModels);
+                // var ms = pc.get(id);
+                // console.log(ms);
+
+                var friends = new Backbone.Collection([
+                  {name: "Athos",      job: "Musketeer"},
+                  {name: "Porthos",    job: "Musketeer"},
+                  {name: "Aramis",     job: "Musketeer"},
+                  {name: "d'Artagnan", job: "Guard"},
+                ]);
+
+                var musketeers = friends.where({job: "Musketeer"});
+                //获得到的是一个数组对象
+                console.log(musketeers);
+                var fname = friends.findWhere({'name':"Athos"});
+                console.log(fname.cid);
+
+
+                
+        })(jQuery);
+        </script>
+</body>
+</html>
