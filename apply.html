@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>backbone demo</title>
+</head>
+<body>
+<script>
+        function Person(){
+                this.name = 'zhangsan';
+                this.age = '18';
+                this.run = function(){
+                        console.log('我会跑')
+                }
+        }
+
+        //apply就是继承另一个类的所有属性和方法。
+        function OnePerson(){
+                Person.apply(this,arguments);//就是Person对象替换this=OnePerson对象
+                this.dump = function(){
+                        console.log('我会跳')
+                }
+        }
+
+        var op = new OnePerson();
+        op.run()
+        op.dump();
+
+        function add(a,b){  
+            console.log(a+b);  
+        }  
+        function sub(a,b){  
+            console.log(a-b);  
+        }  
+          
+        add.call(sub,3,1);//因为函数也是对象，所以add替换sub。
+
+        function Animal(name){      
+            this.name = name;      
+            this.showName = function(){      
+                console.log(this.name);      
+            }      
+        }      
+            
+        function Dog(){
+                this.myname = '狗狗';
+                this.getName = function(){
+                        console.log(this.myname);
+                }
+        }
+
+        function Cat(name){    
+            Animal.call(this, name);//用call实现的继承,
+            Dog.call(this);//实现了多继承
+        }      
+            
+        var cat = new Cat("Black Cat");     
+        cat.showName();  
+        cat.getName();
+
+        // call 的第二个参数可以是任意类型，而apply的第二个参数必须是数组，
+</script>
+</body>
+</html>
