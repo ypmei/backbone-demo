@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>backbone demo</title>         
+        
+</head>
+<body>
+<div id="sum"></div>
+<script src="jquery.js"></script>
+        <script src="underscore.js"></script>
+        <script src="backbone.js"></script>
+
+        <script>
+        (function ($) {
+                
+            var StudentModel = Backbone.Model.extend({})
+                
+            var ClassCollection = Backbone.Collection.extend({});
+
+            var studentModel = new StudentModel();
+            var classCollection = new ClassCollection();
+
+            console.log(studentModel.toJSON());//{key:value}数据对象
+            console.log(classCollection.toJSON());//对象数组
+
+            studentModel.set({name:'zhangsan'});
+            classCollection.add(studentModel);
+
+            console.log(studentModel.toJSON());
+            console.log(classCollection.toJSON());
+
+            console.log('---------')
+            // classCollection.remove(studentModel);
+            studentModel.set({name:'lisi'});
+            //更新了model模型的数据，Collection数据自动更新，
+            //因为Collection用model.prototype继承model的.
+
+            console.log(studentModel.toJSON());
+            console.log(classCollection.toJSON());
+
+            var oneClass = classCollection.at(0);//获取model数据
+            console.log(oneClass);
+
+            var clen = classCollection.length
+            console.log(clen);
+
+            /********************************/
+            var Chapter  = Backbone.Model;
+            var chapters = new Backbone.Collection;
+
+            chapters.comparator = 'page';
+
+            chapters.add(new Chapter({page: 9, title: "The End"}));
+            chapters.add(new Chapter({page: 5, title: "The Middle"}));
+            chapters.add(new Chapter({page: 1, title: "The Beginning"}));
+
+            // console.log(chapters.pluck('page'));
+            //比较适配器
+
+            // console.log(chapters.toJSON());
+            chapters.sort();//排序需要先声明依据的key(comparator)
+            console.log(chapters.toJSON());
+
+            var classdemo = classCollection.clone();
+            console.log(classdemo);
+
+                
+            // console.log(othello);    
+
+        })(jQuery);
+        </script>
+</body>
+</html>
+
