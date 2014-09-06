@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>backbone demo</title>         
+        
+</head>
+<body>
+<div id="sum"></div>
+<script src="jquery.js"></script>
+        <script src="underscore.js"></script>
+        <script src="backbone.js"></script>
+
+        <script>
+        (function ($) {
+
+             var View =  Backbone.View.extend({
+                initialize:function(options){
+                    console.log(options);
+                    this.el = options.container;
+                    this.render();
+                },
+                render:function(){
+                    console.log('render')
+                },
+                hide:function(){
+                    console.log('hide');
+                },
+                show:function(){
+                    console.log('方法重写');
+                }
+             });
+
+             //view可以继承view
+             var AppView = View.extend({
+                open:function(){
+                    View.prototype.hide.apply(this,arguments);
+                    this.$el.html('测试一下');
+                    this.show();
+                },
+                show:function(){
+                    View.prototype.show.apply(this,arguments);
+                    //如果调用原型方法，用apply实现方法复制方法和属性
+                    console.log('对比一下');
+                }
+             })
+
+             //可以实例化的时候传一些需要的参数
+             var view = new AppView({
+                container:'#sum'
+             })
+             view.open();
+
+             console.log(view);
+
+
+                
+        })(jQuery);
+        </script>
+</body>
+</html>
